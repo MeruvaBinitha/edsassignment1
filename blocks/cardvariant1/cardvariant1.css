@@ -1,101 +1,193 @@
-/* GRID */
-.cardvariant1 > ul {
+/* ===========================
+   CARDS BLOCK — OPTION B
+   Dark overlay + icon badge + title/desc always visible;
+   "Read More" pill shows on hover/focus
+   =========================== */
+
+/* --- GRID --- */
+.cards > ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 24px;
 }
 
-/* CARD */
-.cardvariant1 li {
+/* --- CARD --- */
+.cards > ul > li {
   position: relative;
-  border-radius: 16px;
   overflow: hidden;
-  background: #000;
+  border-radius: 14px;
+  background: #0b0b0b;         /* fallback behind the image */
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  isolation: isolate;           /* keep overlay above the image */
 }
 
-/* IMAGE */
-.cv1-image img {
+.cards > ul > li:hover,
+.cards > ul > li:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+/* --- IMAGE --- */
+.cards .cards-card-image { line-height: 0; }
+
+.cards > ul > li picture,
+.cards > ul > li img {
+  display: block;
   width: 100%;
+}
+
+.cards > ul > li img {
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  transition: transform .35s ease;
+  transition: opacity .25s ease, transform .25s ease, filter .25s ease;
 }
 
-/* OVERLAY */
-.cv1-overlay {
+/* Subtle zoom on hover/focus for depth */
+.cards > ul > li:hover img,
+.cards > ul > li:focus-within img {
+  transform: scale(1.02);
+}
+
+/* Since overlay is always visible, dim the image slightly */
+.cards > ul > li .cards-card-image img {
+  filter: brightness(0.65);
+}
+
+/* --- BODY becomes the overlay host (always visible) --- */
+.cards .cards-card-body {
   position: absolute;
   inset: 0;
-  padding: 28px;
-  display: grid;
-  grid-template-columns: 56px 1fr;
-  gap: 16px;
-  align-content: center;
-  background: rgba(0,0,0,0.6);
-  color: #fff;
+  margin: 0;
+  padding: 0;
+  pointer-events: none; /* interactive elements layered above */
   z-index: 1;
 }
 
-/* ICON */
-.cv1-icon {
+/* --- OVERLAY (always visible) --- */
+.cards .cards-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-content: center;
+  padding: clamp(16px, 4vw, 28px);
+  color: #fff;
+  pointer-events: none;
+}
+
+.cards .cards-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.60);
+  z-index: -1;
+}
+
+/* --- Icon badge (white rounded square) --- */
+.cards .cards-badge {
   width: 56px;
   height: 56px;
-  background: #fff;
   border-radius: 12px;
+  display: inline-grid;
+  place-items: center;
+  background: #fff;
+  color: #2D6BFF; /* accent for icon glyph */
+  box-shadow: 0 6px 18px rgba(0,0,0,.18);
+  flex-shrink: 0;
 }
 
-/* TEXT */
-.cv1-text h3 {
-  margin: 0 0 6px;
-  font-size: 20px;
-  font-weight: 700;
+/* --- Title & description --- */
+.cards .cards-overlay-content {
+  align-self: center;
+  max-width: 60ch;
 }
 
-.cv1-text p {
+.cards .cards-overlay-content h3,
+.cards .cards-overlay-content h4 {
+  margin: 0 0 8px 0;
+  font-weight: 800;
+  font-size: clamp(18px, 2.2vw, 22px);
+  line-height: 1.25;
+  color: #fff;
+}
+
+.cards .cards-overlay-content p {
   margin: 0;
-  font-size: 14px;
+  font-size: clamp(14px, 1.9vw, 16px);
   line-height: 1.6;
+  color: rgba(255,255,255,.95);
 }
 
-/* CTA – hidden by default */
-.cv1-cta {
+/* --- Blue footer from legacy design (hidden in Option B) --- */
+.cards .cards-footer {
+  display: none !important;
+}
+
+/* --- CTA (Read More) pill — hidden until hover/focus --- */
+.cards .cards-cta {
   position: absolute;
-  inset: auto 0 0 0;
-  margin: auto;
+  left: 50%;
   top: 50%;
-  transform: translateY(-50%);
-  width: max-content;
-  padding: 12px 20px;
+  transform: translate(-50%, -46%);
+  display: inline-block;
   background: #2D6BFF;
   color: #fff;
-  font-weight: 700;
   border-radius: 10px;
+  padding: 12px 18px;
+  font-weight: 700;
   text-decoration: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
   opacity: 0;
   pointer-events: none;
-  transition: opacity .25s ease, transform .25s ease;
-  z-index: 2;
+  transition: opacity .22s ease, transform .22s ease, background-color .2s ease, box-shadow .2s ease;
+  z-index: 2; /* above overlay */
 }
 
-/* HOVER STATES */
-.cardvariant1 li:hover img {
-  transform: scale(1.05);
-}
-
-.cardvariant1 li:hover .cv1-cta {
+/* Show CTA on hover/focus */
+.cards > ul > li:hover .cards-cta,
+.cards > ul > li:focus-within .cards-cta {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(-50%) scale(1.05);
+  transform: translate(-50%, -50%);
 }
 
-/* HIDE RAW BODY */
-.cv1-visually-hidden {
-  position: absolute;
+.cards .cards-cta:hover,
+.cards .cards-cta:focus-visible {
+  background: #1E55E6;
+  box-shadow: 0 12px 28px rgba(0,0,0,.3);
+}
+
+/* --- Visually hide any raw body (if the JS left it) --- */
+.cards .cards-body-hidden {
+  position: absolute !important;
   width: 1px;
   height: 1px;
   overflow: hidden;
-  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+  clip: rect(1px, 1px, 1px, 1px);
 }
-``
+
+/* --- Reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+  .cards > ul > li,
+  .cards > ul > li img,
+  .cards .cards-cta {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* --- Responsive columns --- */
+@media (max-width: 1024px) {
+  .cards > ul { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .cards > ul { grid-template-columns: 1fr; }
+  .cards .cards-badge { width: 48px; height: 48px; }
+}
