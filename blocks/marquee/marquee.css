@@ -1,60 +1,89 @@
-/* 1. Force the banner to be full-width */
-.marquee-wrapper {
-  width: 100vw !important;
-  max-width: 100vw !important;
-  margin-left: calc(50% - 50vw) !important;
-  padding: 0 !important;
+/* === Marquee Base Styles === */
+
+:root {
+  /* Adjust these to control speed & direction */
+  --marquee-speed: 18s;     /* lower = faster */
+  --marquee-direction: normal; /* normal | reverse */
+  --marquee-gap: 3rem;      /* spacing between items */
 }
 
-.marquee {
-  background-color: #da292e; /* The solid Transpo Red banner */
-  padding: 40px 0;
-  overflow: hidden; /* Hides the text that scrolls off-screen */
+.elementor-widget-container {
+  /* keep your Elementor box intact; no reset here */
+}
+
+.marquee.txmartext {
   position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.marquee-container {
   width: 100%;
   overflow: hidden;
+  /* Optional visual tweaks */
+  background: transparent; /* or a color like #f9f9f9 */
 }
 
-/* 2. The Scrolling Track */
-.marquee-track {
-  display: inline-flex;
+.marquee .marleft {
+  /* We’ll build the track dynamically via JS; this is the outer track */
+  display: flex;
+  align-items: center;
+  gap: var(--marquee-gap);
+  width: max-content;
+  /* The animation is applied to the inner duplicated content wrapper (created by JS) */
+  will-change: transform;
+}
+
+/* Text items inside the marquee */
+.marquee .txmartex {
+  margin: 0;
+  font-size: 1.125rem;       /* 18px */
+  font-weight: 600;
   white-space: nowrap;
-  animation: marqueeScroll 50s linear infinite; 
+  color: #111827;            /* Tailwind gray-900 */
+  /* Optional: subtle styling */
+  padding: 0.25rem 0;
 }
 
-/* 3. The Text Masking Magic */
-.marquee-text {
-  font-size: 80px; /* Huge font size */
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  padding-right: 50px; /* Space between the repeating chunks */
-
-  /* This paints the image inside the text */
-  background-image: var(--text-bg);
-  background-size: cover;
-  background-position: center;
-  background-repeat: repeat-x;
-  
-  /* These two lines make the text transparent and clip the background to the letters! */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent; /* Fallback for older browsers */
-}
-
-/* 4. The Infinite Loop Animation */
-@keyframes marqueeScroll {
-  0% { 
-    transform: translateX(0); 
+/* === Animation Keyframes === */
+@keyframes marquee-slide {
+  from {
+    transform: translateX(0);
   }
-  100% { 
-    /* Translating exactly -50% perfectly aligns the second 
-       duplicate string with the start, creating a flawless loop! */
-    transform: translateX(-50%); 
+  to {
+    transform: translateX(-50%); /* We animate half because we'll duplicate content */
+  }
+}
+
+/* The inner moving wrapper; inserted by JS and animated */
+.marquee .marquee-track {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--marquee-gap);
+  animation: marquee-slide var(--marquee-speed) linear infinite;
+  animation-direction: var(--marquee-direction);
+}
+
+/* Pause on hover (optional; remove if not desired) */
+.marquee.txmartext:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Make it comfortable on small screens */
+@media (max-width: 480px) {
+  .marquee .txmartex {
+    font-size: 1rem;
+  }
+  :root {
+    --marquee-gap: 2rem;
+  }
+}
+
+/* === Optional: RTL Support === */
+/* If your page is RTL, you can set direction via CSS to reverse scroll */
+[dir="rtl"] .marquee .marquee-track {
+  animation-direction: reverse;
+}
+
+/* === Reduced Motion Accessibility === */
+@media (prefers-reduced-motion: reduce) {
+  .marquee .marquee-track {
+    animation: none;
+    transform: none !important;
   }
 }
