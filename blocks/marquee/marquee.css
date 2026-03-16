@@ -1,0 +1,60 @@
+/* 1. Force the banner to be full-width */
+.marquee-wrapper {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  padding: 0 !important;
+}
+
+.marquee {
+  background-color: #da292e; /* The solid Transpo Red banner */
+  padding: 40px 0;
+  overflow: hidden; /* Hides the text that scrolls off-screen */
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* 2. The Scrolling Track */
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marqueeScroll 50s linear infinite; 
+}
+
+/* 3. The Text Masking Magic */
+.marquee-text {
+  font-size: 80px; /* Huge font size */
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding-right: 50px; /* Space between the repeating chunks */
+
+  /* This paints the image inside the text */
+  background-image: var(--text-bg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat-x;
+  
+  /* These two lines make the text transparent and clip the background to the letters! */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent; /* Fallback for older browsers */
+}
+
+/* 4. The Infinite Loop Animation */
+@keyframes marqueeScroll {
+  0% { 
+    transform: translateX(0); 
+  }
+  100% { 
+    /* Translating exactly -50% perfectly aligns the second 
+       duplicate string with the start, creating a flawless loop! */
+    transform: translateX(-50%); 
+  }
+}
