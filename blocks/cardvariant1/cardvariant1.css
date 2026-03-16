@@ -1,0 +1,147 @@
+/* Grid */
+.cardvariant1 > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.cardvariant1 > ul > li.cv1-item {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #0b0b0b;
+  isolation: isolate; /* keep overlay on top of img */
+}
+
+/* Image */
+.cardvariant1 .cv1-card-image { line-height: 0; }
+.cardvariant1 > ul > li img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+/* Overlay (badge + text) */
+.cardvariant1 .cv1-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-content: center;
+  padding: clamp(16px, 4vw, 28px);
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  background: linear-gradient(0deg, rgba(0,0,0,0.60), rgba(0,0,0,0.60));
+  transition: opacity .25s ease, visibility .25s ease;
+  z-index: 1;
+}
+
+/* Default: show overlay on items with cv1-show-overlay */
+.cardvariant1 > ul > li.cv1-show-overlay .cv1-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+.cardvariant1 > ul > li.cv1-show-overlay .cv1-card-image img {
+  opacity: .35;
+}
+
+/* Badge (white rounded square) */
+.cardvariant1 .cv1-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: inline-grid;
+  place-items: center;
+  background: #fff;
+  color: #2D6BFF;
+  box-shadow: 0 6px 18px rgba(0,0,0,.18);
+}
+
+/* Overlay text */
+.cardvariant1 .cv1-text { align-self: center; }
+.cardvariant1 .cv1-text h3 {
+  margin: 0 0 8px 0;
+  font-size: clamp(18px, 2.4vw, 22px);
+  line-height: 1.25;
+  font-weight: 800;
+  color: #fff;
+}
+.cardvariant1 .cv1-text p {
+  margin: 0;
+  font-size: clamp(14px, 1.8vw, 16px);
+  line-height: 1.6;
+  color: rgba(255,255,255,.95);
+  max-width: 58ch;
+}
+
+/* CTA pill (centered) */
+.cardvariant1 .cv1-cta {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-block;
+  background: #2D6BFF;
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease;
+  z-index: 2;
+}
+.cardvariant1 .cv1-cta:hover,
+.cardvariant1 .cv1-cta:focus-visible {
+  background: #1E55E6;
+  transform: translate(-50%, -51%);
+  box-shadow: 0 12px 28px rgba(0,0,0,.3);
+}
+
+/* Variant: first card (CTA only) */
+.cardvariant1 > ul > li.cv1-cta-only .cv1-overlay {
+  opacity: 0;
+  visibility: hidden;
+}
+.cardvariant1 > ul > li.cv1-cta-only .cv1-card-image img {
+  opacity: 1;
+}
+
+/* Hover effects */
+.cardvariant1 > ul > li:hover .cv1-card-image img,
+.cardvariant1 > ul > li:focus-within .cv1-card-image img {
+  transform: scale(1.01);
+}
+.cardvariant1 > ul > li.cv1-show-overlay:hover .cv1-overlay,
+.cardvariant1 > ul > li.cv1-show-overlay:focus-within .cv1-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Keep the original body content for semantics but hide visually */
+.cardvariant1 .cv1-card-body {
+  position: absolute;
+  inset: auto auto 12px 12px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+/* Responsive tweaks */
+@media (max-width: 1024px) {
+  .cardvariant1 > ul { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+}
+@media (max-width: 600px) {
+  .cardvariant1 > ul { grid-template-columns: 1fr; }
+  .cardvariant1 .cv1-badge { width: 48px; height: 48px; }
+}
